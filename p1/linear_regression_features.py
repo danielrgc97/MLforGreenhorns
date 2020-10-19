@@ -23,7 +23,7 @@ def main(args):
     ys = np.sin(xs) + np.random.RandomState(args.seed).normal(0, 0.2, size=args.data_size)
 
     rmses = []
-    for order in range(1, args.range + 1): 
+    for order in range(1, args.range + 1):
 
         # TODO: Create features of x^1, ..., x^order.
         X = np.zeros([args.data_size,order])
