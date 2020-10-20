@@ -30,17 +30,12 @@ def main(args):
     t_train, t_test = sklearn.model_selection.train_test_split(dataset.target, test_size=args.test_size, random_state=args.seed)
 
     # TODO: Solve the linear regression using the algorithm from the lecture,
-    XtX = np.dot(np.transpose(X_train),X_train)
-    XtXInv = np.linalg.inv(XtX)
-    XtXInvXt = np.dot(XtXInv,np.transpose(X_train))
-    w = np.dot(XtXInvXt,t_train)
+    w = np.linalg.inv(np.transpose(X_train)@X_train)@np.transpose(X_train)@t_train
     
     # TODO: Predict target values on the test set
     predictions = np.dot(X_test,w)
 
     # TODO: Compute root mean square error on the test set predictions
-    error = predictions - t_test
-    N = error.shape[0]
     rmse = np.sqrt(sklearn.metrics.mean_squared_error(t_test,predictions))
 
     return rmse
@@ -49,3 +44,4 @@ if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
     rmse = main(args)
     print("{:.2f}".format(rmse))
+    
