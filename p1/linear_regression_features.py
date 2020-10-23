@@ -31,6 +31,8 @@ def main(args):
             X[:,i] = xs**(i+1)
 
         # TODO: Split the data into a train set and a test set.
+        # Use `sklearn.model_selection.train_test_split` method call, passing
+        # arguments `test_size=args.test_size, random_state=args.seed`.
         X_train, X_test = sklearn.model_selection.train_test_split(X, test_size=args.test_size, random_state=args.seed)
         t_train, t_test = sklearn.model_selection.train_test_split(ys, test_size=args.test_size, random_state=args.seed)
 

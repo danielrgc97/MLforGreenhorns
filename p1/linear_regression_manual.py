@@ -21,15 +21,23 @@ def main(args):
     # Load Boston housing dataset
     dataset = sklearn.datasets.load_boston()
 
+    # The input data are in dataset.data, targets are in dataset.target.
+
+    # If you want to learn about the dataset, uncomment the following line.
+    # print(dataset.DESCR)
+
     # TODO: Append a new feature to all input data, with value "1"
     X = np.ones([dataset.data.shape[0],dataset.data.shape[1]+1])
     X[:,:-1] = dataset.data
 
     # TODO: Split the dataset into a train set and a test set.
+    # Use `sklearn.model_selection.train_test_split` method call, passing
+    # arguments `test_size=args.test_size, random_state=args.seed`.
     X_train, X_test = sklearn.model_selection.train_test_split(X, test_size=args.test_size, random_state=args.seed)
     t_train, t_test = sklearn.model_selection.train_test_split(dataset.target, test_size=args.test_size, random_state=args.seed)
 
     # TODO: Solve the linear regression using the algorithm from the lecture,
+    # explicitly computing the matrix inverse (using `np.linalg.inv`).
     w = np.linalg.inv(np.transpose(X_train)@X_train)@np.transpose(X_train)@t_train
     
     # TODO: Predict target values on the test set
