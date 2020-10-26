@@ -69,7 +69,6 @@ def main(args):
         predictions_test = np.dot(X_test,weights)
         rmse_test = np.sqrt(sklearn.metrics.mean_squared_error(t_test,predictions_test))
         test_rmses.append(rmse_test)
-        print(rmse_train,rmse_test)
         
         
 
@@ -79,7 +78,6 @@ def main(args):
     predictions = model.predict(X_test[:,:-1])
     explicit_rmse = np.sqrt(sklearn.metrics.mean_squared_error(t_test,predictions))
     sgd_rmse = rmse_test
-    print(sgd_rmse,explicit_rmse)
 
     if args.plot:
         import matplotlib.pyplot as plt
