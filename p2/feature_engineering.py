@@ -8,6 +8,9 @@ import sklearn.model_selection
 import sklearn.pipeline
 import sklearn.preprocessing
 
+# 93bc2ff7-0d50-11eb-98c0-005056ad4f31.
+# b4fbbfe2-0fa9-11eb-98c0-005056ad4f31.
+
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
 parser.add_argument("--dataset", default="boston", type=str, help="Standard sklearn dataset to load")
@@ -83,7 +86,7 @@ def main(args):
     # Then transform the training data into `train_data` (you can do both these
     # steps using `fit_transform`), and transform testing data to `test_data`.
     train_data = pipe.fit_transform(X_train)
-    test_data = pipe.fit_transform(X_test)
+    test_data = pipe.transform(X_test)
     
     return train_data, test_data
 
