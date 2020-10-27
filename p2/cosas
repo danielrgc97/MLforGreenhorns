@@ -1,17 +1,20 @@
+##PLOTINGDATARELATIONS##
 if args.plot:
-            import matplotlib.pyplot as plt
-            for h in range(7):
-                sold = []
-                for i in range(24):
-                    ventas = 0
-                    divisor = 0
-                    for j in range(train.data.shape[0]):
-                        if train.data[j,3] == i and train.data[j,5] == h:
-                            ventas += train.target[j]
-                            divisor+=1
-                    ventas = ventas/divisor
-                    sold.append(ventas)
-                plt.plot(sold, label=h)
-                plt.legend()
-            if args.plot is True: plt.show()
-            else: plt.savefig(args.plot, transparent=True, bbox_inches="tight")
+    import matplotlib.pyplot as plt
+    for i in range(2):
+        sold = []
+        for j in range(24):
+            ventas = 0
+            divisor = 0
+            for k in range(train.data.shape[0]):
+                if train.data[k,3] == j and train.data[k,4] == i:
+                    ventas += train.target[k]
+                    divisor+=1
+            if divisor != 0:
+                ventas = ventas/divisor
+            sold.append(ventas)
+        plt.plot(sold, label=i)
+        plt.legend()
+    if args.plot is True: plt.show()
+    else: plt.savefig(args.plot, transparent=True, bbox_inches="tight")
+##PLOTINGDATARELATIONS##
