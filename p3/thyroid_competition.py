@@ -66,7 +66,6 @@ def main(args):
         param_grid = {
             'poly__degree': [2],
             'lg__C': [126],
-            'lg__max_iter':[95],
         }
         search = sklearn.model_selection.GridSearchCV(pipe, param_grid, n_jobs=-1, cv=5)
 

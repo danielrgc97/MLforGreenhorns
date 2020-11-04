@@ -23,6 +23,9 @@ parser.add_argument("--seed", default=42, type=int, help="Random seed")
 parser.add_argument("--test_size", default=0.5, type=lambda x:int(x) if x.isdigit() else float(x), help="Test set size")
 # If you add more arguments, ReCodEx will keep them with your default values.
 
+def sigma(x):
+    return 1/(1+np.exp(-x))
+
 def main(args):
     # Create a random generator with a given seed
     generator = np.random.RandomState(args.seed)
@@ -40,8 +43,8 @@ def main(args):
     X_train, X_test = sklearn.model_selection.train_test_split(X, test_size=args.test_size, random_state=args.seed)
     t_train, t_test = sklearn.model_selection.train_test_split(target, test_size=args.test_size, random_state=args.seed)
     train_data = X_train
-    train_target = X_test
-    test_data = t_train
+    test_data = X_test
+    train_target = t_train
     test_target = t_test
 
     # Generate initial linear regression weights
@@ -57,8 +60,9 @@ def main(args):
         for i in range(train_data.shape[0]):
             j = permutation[i]
             iCorr = i % args.batch_size
-            for k in range(weights.shape[0]): 
-                grads[k,iCorr] = (test_data[j] - 1/(1 + np.exp( - train_data[j,:] @ weights))) * train_data[j,k]
+            # for k in range(weights.shape[0]): 
+            #     grads[k,iCorr] = (train_target[j] - 1/(1 + np.exp( - train_data[j,:] @ weights))) * train_data[j,k]
+            grads[:,iCorr] = (train_target[j] - 1/(1 + np.exp( - train_data[j] @ weights))) * train_data[j]
             if iCorr == args.batch_size - 1:
                 g = - np.sum(grads,axis=1)/args.batch_size
                 weights = weights - args.learning_rate * g
@@ -69,6 +73,15 @@ def main(args):
         # train test and the test set. The loss is the average MLE loss (i.e., the
         # negative log likelihood, or crossentropy loss, or KL loss) per example.
         train_accuracy, train_loss, test_accuracy, test_loss = 0,0,0,0
+        probabilities = np.ones([t_test.shape[0],2])
+        for i in range(probabilities.shape[0]):
+            probabilities[i,1] = sigma(X_test[i] @ weights)
+            probabilities[i,0] = 1 - sigma(X_test[i] @ weights)
+        acc = 0
+        for i in range(probabilities.shape[0]):
+            if np.all(probabilities[i,t_test[i]]>=probabilities[i,:]): acc +=1
+
+        test_accuracy = acc/probabilities.shape[0]
 
         print("After iteration {}: train loss {:.4f} acc {:.1f}%, test loss {:.4f} acc {:.1f}%".format(
             iteration + 1, train_loss, 100 * train_accuracy, test_loss, 100 * test_accuracy))
@@ -95,3 +108,4 @@ if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
     weights = main(args)
     print("Learned weights", *("{:.2f}".format(weight) for weight in weights))
+
